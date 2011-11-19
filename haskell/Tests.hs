@@ -1,4 +1,3 @@
-module Main where
 import Test.HUnit
 import System.Exit
 import System.IO
@@ -19,13 +18,15 @@ divisor k r (n,out) | n `mod` k == 0 = (n, out ++ r)
                     | otherwise      = (n, out)
   
 content :: (Int, String) -> (Int, String)
-content (n,s) = (n,s ++ concatMap (fbq.fromEnum) (show n))
+content (n,s) = (n,s ++ concatMap fbq (show n))
   where
-    fbq 3 = "Foo"
-    fbq 5 = "Bar"
-    fbq 7 = "Qix"
-    fbq c  = ""
+    fbq '3' = "Foo"
+    fbq '5' = "Bar"
+    fbq '7' = "Qix"
+    fbq  c  = ""
     
+main = mapM_ putStrLn $ map fooBarQix [1 .. 100]
+
 --- TESTS
 
 tests = TestList [
@@ -48,12 +49,10 @@ tests = TestList [
   ]
         
 --- bruit pour les tests....
-main = mapM_ putStrLn $ map fooBarQix [1 .. 100]
-
-main' = do counts <- runTest (tests)
-           case (errors counts + failures counts) of
-             0 -> return ExitSuccess
-             n -> return (ExitFailure n)
+runTests = do counts <- runTest (tests)
+              case (errors counts + failures counts) of
+                0 -> return ExitSuccess
+                n -> return $ ExitFailure n
 
 runTest :: Test -> IO Counts
 runTest  t = do (counts, _) <- runTestText (putTextToHandle stderr False) t
