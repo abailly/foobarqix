@@ -2,6 +2,8 @@ import Test.HUnit
 import System.Exit
 import System.IO
 import Data.List
+import System
+import System.Exit
 
 fooBarQix :: Int -> String
 
